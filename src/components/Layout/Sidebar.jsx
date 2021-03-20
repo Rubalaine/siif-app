@@ -23,6 +23,7 @@ const Lnk = styled(Link)`
   text-decoration: none;
   color: white;
   padding: 0.5rem 1rem;
+  text-transform: uppercase;
   transition: all 0.3s;
   &:hover {
     border-color: white;
