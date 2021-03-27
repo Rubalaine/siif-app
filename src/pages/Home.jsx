@@ -4,10 +4,13 @@ import Alunos from "../components/Layouts/Alunos";
 import Aulas from "../components/Layouts/Aulas";
 import Disciplinas from "../components/Layouts/Disciplinas";
 import Sidebar from "../components/Layouts/Sidebar";
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 const { Header, Content } = Layout;
 
 const Home = () => {
-  return (
+  const { auth } = useAuth();
+  return auth.user ? (
     <Layout style={{ minHeight: "100vh" }}>
       <Sidebar />
       <Layout className="site-layout">
@@ -24,6 +27,8 @@ const Home = () => {
         </Content>
       </Layout>
     </Layout>
+  ) : (
+    <Navigate to="/login" />
   );
 };
 

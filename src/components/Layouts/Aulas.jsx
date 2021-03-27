@@ -38,7 +38,7 @@ const columns = [
 const Aulas = () => {
   const [dataSource, setDatasource] = useState([]);
   const params = useParams();
-  const {auth} = useAuth();
+  const { auth } = useAuth();
   useEffect(() => {
     console.log(auth.token);
     async function fetchData() {
@@ -71,6 +71,7 @@ const Aulas = () => {
       );
     }
     fetchData();
+    // eslint-disable-next-line
   }, []);
   return <Table dataSource={dataSource} columns={columns} />;
 };

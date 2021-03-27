@@ -1,11 +1,11 @@
-import axios from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
 
-const AuthContext = createContext();
+import React, { createContext, useContext, useState } from "react";
+
+export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 const data = JSON.parse(window.localStorage.getItem("authData")) || {
-  toke: "",
-  user: "",
+  token: "",
+  user: {},
 };
 
 const AuthProvider = ({ children }) => {
@@ -13,26 +13,35 @@ const AuthProvider = ({ children }) => {
     token: data.token,
     user: data.user,
   });
-  const loginByEmailAndPassword = async (email, password) => {
-    try {
-      const { data } = await axios.post("http://localhost:1337/auth/local", {
-        identifier: email,
-        password: password,
-      });
-      setAuth({
-        token: data.jwt,
-        user: data.user.docente,
-      });
-      console.log(JSON.stringify(auth));
-      window.localStorage.setItem("authData", JSON.stringify(auth));
-      return "entrou com sucesso";
-    } catch (error) {
-      console.log(error);
-      return "erro";
-    }
-  };
+  // const loginByEmailAndPassword = (email, password) => {
+  //   console.log("before ", auth);
+  //   axios
+  //     .post("http://localhost:1337/auth/local", {
+  //       identifier: email,
+  //       password: password,
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //       setAuth({
+  //         ...auth,
+  //         token: res.data.jwt,
+  //         user: res.data.user.docente,
+  //       });
+  //       console.log(auth);
+  //       if (auth.token && auth.user) {
+  //         console.log("[auth] ", JSON.stringify(auth));
+  //         window.localStorage.setItem("authData", JSON.stringify(auth));
+  //         // return "success";
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error.request) return "requestError";
+  //       if (error.response) return "responseError";
+  //       return "requestError";
+  //     });
+  // };
   return (
-    <AuthContext.Provider value={{ auth, setAuth, loginByEmailAndPassword }}>
+    <AuthContext.Provider value={{ auth, setAuth }}>
       {children}
     </AuthContext.Provider>
   );

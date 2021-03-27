@@ -1,28 +1,63 @@
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, Row, Col, Alert } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const { auth, loginByEmailAndPassword } = useAuth();
+  const { auth, setAuth } = useAuth();
+  const [erro, setErro] = useState("");
   const navigate = useNavigate();
-  const onFinish = async (values) => {
-    try {
-      setLoading(true);
-      const res = await loginByEmailAndPassword(values.email, values.password);
-      if (res !== "error") return navigate(`/${auth.user.id}`);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+  const onFinish = (values) => {
+    setErro("");
+    setLoading(true);
+    axios
+      .post("http://localhost:1337/auth/local", {
+        identifier: values.email,
+        password: values.password,
+      })
+      .then((res) => {
+        console.log(res);
+        setAuth({
+          token: res.data.jwt,
+          user: res.data.user.docente,
+        });
+        console.log(auth);
+        if (auth.token && auth.user) {
+          console.log("[auth] ", JSON.stringify(auth));
+          window.localStorage.setItem("authData", JSON.stringify(auth));
+          return navigate(`/${auth.user.id}`);
+        }
+      })
+      .catch((error) => {
+        if (error.request) return setErro("erro inesperado ao entrar");
+        if (error.response)
+          return setErro("o Email e a senha não podem diferir");
+        return setErro("erro inesperado ao entrar");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    // setErro("");
+    // try {
+    //   setLoading(true);
+    //   const res = await loginByEmailAndPassword(values.email, values.password);
+    //   if (res === "requestError") setErro("erro inesperado ao entrar");
+    //   if (res === "responseError")
+    //     setErro("o Email e a senha não podem diferir");
+    //   if (res === "success") return navigate(`/${auth.user.id}`);
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (
     <Row justify="center" align="middle" style={{ height: "100vh" }}>
-      <Col >
+      <Col>
         <Form
           name="normal_login"
           className="login-form"
@@ -33,6 +68,17 @@ const Login = () => {
             width: "400px",
           }}
         >
+          {erro ? (
+            <Alert
+              message="Erro"
+              description={erro}
+              type="error"
+              showIcon
+              closable
+              style={{ marginBottom: "20px" }}
+            />
+          ) : null}
+
           <Form.Item name="email">
             <Input prefix={<MailOutlined />} type="email" placeholder="email" />
           </Form.Item>
