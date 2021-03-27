@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LoginField from "./LoginField";
 import Spacer from "./../Utils/Spacer";
 import Button from "../Buttons/Button";
+import { useNavigate } from "react-router-dom";
 const Form = styled.form`
   width: 40rem;
   padding: 3rem;
@@ -11,8 +12,10 @@ const Form = styled.form`
   box-shadow: 0 0 10px rgb(0 0 0 / 24%);
 `;
 const LoginForm = () => {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
+    navigate('/')
   };
   return (
     <Form onSubmit={handleSubmit}>
