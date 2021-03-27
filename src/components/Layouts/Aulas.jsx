@@ -1,41 +1,48 @@
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-const columns = [
-  {
-    title: "Nr",
-    dataIndex: "nr",
-    key: "nr",
-  },
-  {
-    title: "Dia",
-    dataIndex: "dia",
-    key: "dia",
-  },
-  {
-    title: "Inicio",
-    dataIndex: "inicio",
-    key: "inicio",
-  },
-  {
-    title: "Fim",
-    dataIndex: "fim",
-    key: "fim",
-  },
-  {
-    title: "Tipo",
-    dataIndex: "tipo",
-    key: "tipo",
-  },
-  {
-    title: "Estado",
-    dataIndex: "estado",
-    key: "estado",
-  },
-];
+
 const Aulas = () => {
+  const columns = [
+    {
+      title: "Nr",
+      dataIndex: "nr",
+      key: "nr",
+    },
+    {
+      title: "Dia",
+      dataIndex: "dia",
+      key: "dia",
+    },
+    {
+      title: "Inicio",
+      dataIndex: "inicio",
+      key: "inicio",
+    },
+    {
+      title: "Fim",
+      dataIndex: "fim",
+      key: "fim",
+    },
+    {
+      title: "Tipo",
+      dataIndex: "tipo",
+      key: "tipo",
+    },
+    {
+      title: "Estado",
+      dataIndex: "estado",
+      key: "estado",
+    },
+    {
+      title: "Ação",
+      dataIndex: "acao",
+      key: "acao",
+      render: (el) => <Button type="primary">dar aula</Button>,
+    },
+  ];
   const [dataSource, setDatasource] = useState([]);
   const params = useParams();
   const { auth } = useAuth();
@@ -56,6 +63,7 @@ const Aulas = () => {
         data.data.map((el) => {
           return {
             nr: el.id,
+            acao: el.id,
             inicio: el.inicio.substr(0, 5),
             fim: el.fim.substr(0, 5),
             dia: new Date(el.dia).toLocaleString("pt-pt", {
