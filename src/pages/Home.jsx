@@ -10,7 +10,7 @@ const { Header, Content } = Layout;
 
 const Home = () => {
   const { auth } = useAuth();
-  return auth.user ? (
+  return auth.user && auth.token ? (
     <Layout style={{ minHeight: "100vh" }}>
       <Sidebar />
       <Layout className="site-layout">

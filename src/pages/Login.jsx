@@ -1,6 +1,6 @@
 import { Form, Input, Button, Row, Col, Alert } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +9,18 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { auth, setAuth } = useAuth();
   const [erro, setErro] = useState("");
+  useEffect(() => {
+    document.title = "Entrar | Sistema de gerenciamento de assiduidade";
+  }, []);
+  useEffect(() => {
+    console.log("on effects | ", auth);
+    if (auth.token && auth.user) {
+      console.log("[auth] ", JSON.stringify(auth));
+      window.localStorage.setItem("authData", JSON.stringify(auth));
+      return navigate(`/${auth.user.id}`);
+    }
+    // eslint-disable-next-line
+  }, [auth]);
   const navigate = useNavigate();
   const onFinish = (values) => {
     setErro("");
@@ -25,11 +37,6 @@ const Login = () => {
           user: res.data.user.docente,
         });
         console.log(auth);
-        if (auth.token && auth.user) {
-          console.log("[auth] ", JSON.stringify(auth));
-          window.localStorage.setItem("authData", JSON.stringify(auth));
-          return navigate(`/${auth.user.id}`);
-        }
       })
       .catch((error) => {
         if (error.request) return setErro("erro inesperado ao entrar");
