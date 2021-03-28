@@ -6,6 +6,7 @@ import Disciplinas from "../components/Layouts/Disciplinas";
 import Sidebar from "../components/Layouts/Sidebar";
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
+import Aula from "../components/Layouts/Aula";
 const { Header, Content } = Layout;
 
 const Home = () => {
@@ -22,6 +23,7 @@ const Home = () => {
             <Route path="/:id" element={<Aulas />} />
             <Route path="/alunos" element={<Alunos />} />
             <Route path="/aulas" element={<Aulas />} />
+            <Route path="/aula/:aula" element={<Aula />} />
             <Route path="/disciplinas" element={<Disciplinas />} />
           </Routes>
         </Content>

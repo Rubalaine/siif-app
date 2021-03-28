@@ -63,7 +63,12 @@ const Login = () => {
   };
 
   return (
-    <Row justify="center" align="middle" style={{ height: "100vh" }}>
+    <Row
+      justify="center"
+      color="indigo"
+      align="middle"
+      style={{ height: "100vh" }}
+    >
       <Col>
         <Form
           name="normal_login"
