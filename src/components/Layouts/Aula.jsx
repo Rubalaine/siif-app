@@ -1,4 +1,4 @@
-import { Button, Space, Table } from "antd";
+import { Button, Divider, Space, Table } from "antd";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -55,6 +55,12 @@ const Aula = () => {
     });
     // eslint-disable-next-line
   }, [params]);
+  const handlePresente = (id) => {
+    window.alert(id + " está presente");
+  };
+  const handleAusente = (id) => {
+    window.alert(id + " está ausente");
+  };
   const columns = [
     {
       title: "Código",
@@ -77,8 +83,22 @@ const Aula = () => {
       key: "acao",
       render: (el) => (
         <Space direction="horizontal">
-          <Button type="primary">Presente</Button>
-          <Button type="danger">Ausente</Button>
+          <Button
+            onClick={() => {
+              handlePresente(el);
+            }}
+            type="primary"
+          >
+            Presente
+          </Button>
+          <Button
+            onClick={() => {
+              handleAusente(el);
+            }}
+            type="danger"
+          >
+            Ausente
+          </Button>
         </Space>
       ),
     },
@@ -100,6 +120,7 @@ const Aula = () => {
           Duracao: {aula.inicio} ás {aula.fim}
         </Text>
       </Space>
+      <Divider />
       <Table dataSource={estudantes} columns={columns} />
     </>
   );
