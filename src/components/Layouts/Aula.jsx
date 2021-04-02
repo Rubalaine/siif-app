@@ -8,7 +8,9 @@ import { useAuth } from "../../context/AuthContext";
 const Aula = () => {
   const params = useParams();
   const [aula, setAula] = useState({});
+  const [comuter, setComuter] = useState(false);
   const [estudantes, setEstudantes] = useState([]);
+  const [presentes, setPresentes] = useState([]);
   const { auth } = useAuth();
   useEffect(() => {
     console.log(params);
@@ -21,7 +23,7 @@ const Aula = () => {
           },
         }
       );
-      console.log(data);
+      setPresentes(...[data.presentes.map((el) => el.id)]);
       setAula({
         ...aula,
         ...data,
@@ -54,12 +56,24 @@ const Aula = () => {
       fetchStudents();
     });
     // eslint-disable-next-line
-  }, [params]);
-  const handlePresente = (id) => {
-    window.alert(id + " está presente");
-  };
-  const handleAusente = (id) => {
-    window.alert(id + " está ausente");
+  }, [params, comuter]);
+  const handlePresente = async (id) => {
+    try {
+      const { data } = await axios({
+        method: "PUT",
+        data: {
+          presentes: [...presentes, id],
+        },
+        url: `http://localhost:1337/aulas/${params.aula}`,
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      setComuter(!comuter);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const columns = [
     {
@@ -84,20 +98,13 @@ const Aula = () => {
       render: (el) => (
         <Space direction="horizontal">
           <Button
+            disabled={presentes.includes(el)}
             onClick={() => {
               handlePresente(el);
             }}
             type="primary"
           >
             Presente
-          </Button>
-          <Button
-            onClick={() => {
-              handleAusente(el);
-            }}
-            type="danger"
-          >
-            Ausente
           </Button>
         </Space>
       ),
