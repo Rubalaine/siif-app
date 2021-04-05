@@ -13,6 +13,11 @@ const Aulas = () => {
       key: "nr",
     },
     {
+      title: "Turma",
+      dataIndex: "turma",
+      key: "turma",
+    },
+    {
       title: "Dia",
       dataIndex: "dia",
       key: "dia",
@@ -58,7 +63,7 @@ const Aulas = () => {
   const { auth } = useAuth();
   useEffect(() => {
     async function fetchData() {
-      const data = await axios.get(
+      const { data } = await axios.get(
         `http://localhost:1337/aulas?disciplina.docente=${params.id}`,
         {
           headers: {
@@ -66,12 +71,14 @@ const Aulas = () => {
           },
         }
       );
-      document.title = data.data[0].disciplina.nome;
+      console.log(data);
+      document.title = data[0].disciplina.nome;
       setDatasource(
-        data.data.map((el) => {
+        data.map((el) => {
           return {
             nr: el.id,
             acao: el.id,
+            turma: el.sala.turma,
             inicio: el.inicio.substr(0, 5),
             fim: el.fim.substr(0, 5),
             dia: new Date(el.dia).toLocaleString("pt-pt", {
