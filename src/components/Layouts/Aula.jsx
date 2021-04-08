@@ -124,10 +124,6 @@ const Aula = () => {
           })}
         </Text>
         <Text>
-          Sala {aula.sala.numero} {aula.sala.localizacao}, Turma:{" "}
-          {aula.sala.turma}
-        </Text>
-        <Text>
           Duracao: {aula.inicio} ás {aula.fim}
         </Text>
       </Space>
